@@ -13,6 +13,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.time.LocalDateTime;
 import java.time.Duration;
+import java.util.List;
 
 
 public class GestorRtaOperador {
@@ -47,7 +48,7 @@ public class GestorRtaOperador {
         llamada.tomadaPorOperador(buscarEstadoEnCurso());
         
         //buscamos las validaciones disponibles.
-        ArrayList<Validacion> cad = buscarValidaciones();
+        List<Validacion> cad = buscarValidaciones();
         
         //mostamos los datos de la llamada y de validacion en la pantalla.
         PantallaRtaOperador.mostrarDatosLlamadayValidaciones(cad);
@@ -114,7 +115,7 @@ public class GestorRtaOperador {
     
     
     //Metodo encargado de obtener las validaciones.
-    public ArrayList<Validacion> buscarValidaciones(){
+    public List<Validacion> buscarValidaciones(){
         
         //Busca las validaciones en las opciones.
         return categoriaLlamada.buscarValidaciones();

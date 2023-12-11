@@ -1,0 +1,54 @@
+package config;
+
+import Modelos.*;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.cfg.Environment;
+import org.hibernate.SessionFactory;
+
+import java.util.Properties;
+
+public class HibernateConfig {
+
+    private static SessionFactory sessionFactory;
+
+    public static SessionFactory getSessionFactory() {
+        if (sessionFactory == null) {
+            try {
+                Configuration configuration = new Configuration();
+
+                // Configuración de la base de datos
+                Properties properties = new Properties();
+                properties.put(Environment.DRIVER, "com.mysql.cj.jdbc.Driver");
+                properties.put(Environment.URL, "jdbc:mysql://localhost:3306/ppai_mari");
+                properties.put(Environment.USER, "root");
+                properties.put(Environment.PASS, "admin");
+                properties.put(Environment.DIALECT, "org.hibernate.dialect.MySQL8Dialect");
+                properties.put(Environment.SHOW_SQL, "false");
+                properties.put(Environment.HBM2DDL_AUTO, "update");
+
+                configuration.setProperties(properties);
+
+                // Mapeo de las clases de entidad
+                configuration.addAnnotatedClass(CambioEstado.class);
+                configuration.addAnnotatedClass(CategoriaLlamada.class);
+                configuration.addAnnotatedClass(Cliente.class);
+                configuration.addAnnotatedClass(Estado.class);
+                configuration.addAnnotatedClass(InformacionCliente.class);
+                configuration.addAnnotatedClass(Llamada.class);
+                configuration.addAnnotatedClass(OpcionLlamada.class);
+                configuration.addAnnotatedClass(OpcionValidacion.class);
+                configuration.addAnnotatedClass(SubOpcionLlamada.class);
+                configuration.addAnnotatedClass(Validacion.class);
+
+
+
+                // Crear SessionFactory
+                sessionFactory = configuration.buildSessionFactory();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return sessionFactory;
+    }
+
+}

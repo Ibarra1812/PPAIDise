@@ -4,6 +4,7 @@ package Vista;
 import Controlador.GestorRtaOperador;
 import Modelos.Validacion;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import javax.swing.JOptionPane;
 
@@ -332,7 +333,7 @@ public class PantallaRtaOperador extends javax.swing.JFrame {
     }//GEN-LAST:event_comboAccionActionPerformed
 
     //Metodo encargado de mostrar en pantalla los datos de la llamas y validaciones
-    public void mostrarDatosLlamadayValidaciones(ArrayList<Validacion> cad){
+    public void mostrarDatosLlamadayValidaciones(List<Validacion> cad){
         //Creamos un Array que contenga los datos de la llamada.
         String[] datos = gestor.obtenerDatosLlamada();
         
