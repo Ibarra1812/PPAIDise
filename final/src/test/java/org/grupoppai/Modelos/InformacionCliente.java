@@ -42,18 +42,13 @@ public class InformacionCliente {
     }
 
     //Metodo encargado de comprobar la validacion
-    public boolean esValidacion(String validacion){
-        //Condicional encargado de combroba que la validacion sea correcta.
-        return this.validacion.esValidacion(validacion);
-    
+    public boolean esValidacion(Validacion validacion){
+        return this.validacion == validacion;
     }
 
-    //Metodo encargar de corroborar que la opcion sea la correcta.
+    //Metodo encargado de comprobar que la opcion sea la correcta.
     public boolean esInformacionCorrecta(String datoValidacion){
-        
         return this.datoAValidar.equals(datoValidacion);
-        
-    
     }
     
     

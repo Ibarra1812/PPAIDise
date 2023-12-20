@@ -1,33 +1,14 @@
 package org.grupoppai.Modelos;
 
+import org.grupoppai.Patrones.State.Estado;
+import org.hibernate.Session;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
+
 @Entity
 public class Llamada {
-    @Override
-    public String toString() {
-        return "Llamada{" +
-                "id=" + id +
-                ", descOperador='" + descOperador + '\'' +
-                ", detalleAccionRequerida='" + detalleAccionRequerida + '\'' +
-                ", duracion=" + duracion +
-                ", encuestaEnviada=" + encuestaEnviada +
-                ", observacionAuditor='" + observacionAuditor + '\'' +
-                ", cliente=" + cliente +
-                ", cambioEstado=" + cambioEstado +
-                ", estado=" + estado +
-                ", accion='" + accion + '\'' +
-                ", opcionLlamada=" + opcionLlamada +
-                ", subOpcionLlamada=" + subOpcionLlamada +
-                '}';
-    }
-
-    public Llamada() {
-    }
-
-
 
     /*
      * Construct
@@ -39,7 +20,6 @@ public class Llamada {
     private String descOperador = "";
     private String detalleAccionRequerida = " ";
 
-
     private int duracion;
     private boolean encuestaEnviada = false;
     private String observacionAuditor = "";
@@ -48,6 +28,7 @@ public class Llamada {
     @ManyToMany
     private List<CambioEstado> cambioEstado;
     @ManyToOne
+    @JoinColumn(name = "estado_id")
     private Estado estado;
     private String accion;
     @ManyToOne
@@ -70,14 +51,18 @@ public class Llamada {
         this.subOpcionLlamada = subOpcionLlamada;
     }
 
-    public void tomadaPorOperador(Estado estado){
-        
-        //Crea el cambio de estado con su fecha, hora y estado correspondiente.
-        crearCambioEstado(estado);
-        
-        //settea el estado actual de la 
-        setEstadoActual(estado);
-        
+    public Llamada() {
+    }
+
+    public void tomadaPorOperador (LocalDateTime fechaHoraActual) {
+        // Bloque try generado por el lenguaje.
+        try {
+            this.estado.tomarPorOperador(this, fechaHoraActual, this.cambioEstado);
+
+        // Bloque catch generado por el lenguaje.
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+        }
     }
    
     public OpcionLlamada getOpcionLlamada() {
@@ -114,81 +99,27 @@ public class Llamada {
         return cliente.getNombreCompleto();
     }
 
-
     public void setEstadoActual(Estado estado) {
         this.estado = estado;
-        
     }
 
     public void setDescOperador(String descOperador) {
         this.descOperador = descOperador;
     }
 
-    
-    public void crearCambioEstado(Estado estado){
-        
-        CambioEstado camEstado = new CambioEstado(LocalDateTime.now(),estado);
-        setCambioEstado(camEstado);
-        
-    }
+    public void finalizarLlamada (LocalDateTime fechaHoraActual) {
+        // Bloque try generado por el lenguaje.
+        try {
+            this.estado.finalizarLlamada(this, fechaHoraActual, cambioEstado);
 
-    public void setCambioEstado(CambioEstado cambioEstado) {
-        this.cambioEstado.add(cambioEstado);
-    }
-    
-
-    //Arraylist necesario para el realizar la comparacion de string y hacer los esFinalizados, y esEnCurso
-    public List<CambioEstado> getCambioEstado() {
-        return cambioEstado;
-    }
-    
-    //Metodo encargado de finalizar la llamada cargando el estado "Finalizado".
-    public void finalizarLlamada(Estado estado,String[] datosPantalla){
-        //Calculamos la duracion de la llamada.
-        calcularDuracion();
-        //Creamos el nuevo cambio de estado.
-        crearCambioEstado(estado);
-        //Setteamos en nuevo cambio estado.
-        setEstadoActual(estado);
-
-        //Setteamos la accion y la respuesta del operador.
-        setAccion(datosPantalla[1]);
-        setDetalleAccionRequerida(datosPantalla[0]);
-        
-        System.out.println(getAccion());
-        System.out.println(getDetalleAccionRequerida());
-    }
-    
-    //Metodo encargado de calcular la duracion de la llamada 
-    public void calcularDuracion(){
-        int tiempo_1 = 0;
-        int tiempo_2 = 0;
-        for(int i=0;i<cambioEstado.size()-1;i++){
-            if(cambioEstado.get(i).getEstado().esFinalizado(cambioEstado.get(i).getEstado())){
-                tiempo_1 = cambioEstado.get(i).getFechayHoraInicio().getSecond();
-                
-            }
-            if(cambioEstado.get(i).getEstado().esEnCurso(cambioEstado.get(i).getEstado())){
-                tiempo_2 = cambioEstado.get(i).getFechayHoraInicio().getSecond();
-                    
-            }
-            
+            // Bloque catch generado por el lenguaje.
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
         }
-        int tiempo_total = tiempo_2 - tiempo_1;
-    
-    }
-    
-    //FLUJO ALTERNATIVO.
-    //En caso que el cliente corte la llamada, esta pasa a estado cancelada, 
-    //creando el cambio estado y setteando el estado correspondiente.
-    public void cancelarLlamada(Estado estado){
-        crearCambioEstado(estado);
-        setEstadoActual(estado);
-        
     }
     
     //Metodo encargado de settear la duracion.
-    public void setDuracion(int duracion) {
+    public void setDuracion (int duracion) {
         this.duracion = duracion;
         
     }  
@@ -196,5 +127,27 @@ public class Llamada {
     public int getDuracion() {
         return duracion;
     }
-    
+
+    // Método para agregar el cambio de estado
+    public void agregarCambio(CambioEstado nuevoCambio) {
+        this.cambioEstado.add(nuevoCambio);
+    }
+
+    public void imprimirCambios() {
+        for (CambioEstado cambio: this.cambioEstado) {
+            System.out.println(cambio.getFechaHoraInicio());
+        }
+    }
+
+    public String getDescOperador() {
+        return this.descOperador;
+    }
+
+    public Estado getEstadoActual() {
+        return this.estado;
+    }
+
+    public List<CambioEstado> getCambioEstado() {
+        return this.cambioEstado;
+    }
 }

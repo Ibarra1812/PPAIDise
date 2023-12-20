@@ -1,6 +1,8 @@
 package org.grupoppai.config;
 
 import org.grupoppai.Modelos.*;
+import org.grupoppai.Patrones.State.Estado;
+import org.grupoppai.Patrones.State.Implementaciones.*;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
 import org.hibernate.SessionFactory;
@@ -38,8 +40,14 @@ public class HibernateConfig {
                 configuration.addAnnotatedClass(OpcionLlamada.class);
                 configuration.addAnnotatedClass(SubOpcionLlamada.class);
                 configuration.addAnnotatedClass(Validacion.class);
-
-
+                configuration.addAnnotatedClass(Iniciada.class);
+                configuration.addAnnotatedClass(EnCurso.class);
+                configuration.addAnnotatedClass(Finalizada.class);
+                configuration.addAnnotatedClass(PendienteDeEscucha.class);
+                configuration.addAnnotatedClass(Descartada.class);
+                configuration.addAnnotatedClass(EscuchaConObservacion.class);
+                configuration.addAnnotatedClass(EscuchaCorrecta.class);
+                configuration.addAnnotatedClass(Cancelada.class);
 
                 // Crear SessionFactory
                 sessionFactory = configuration.buildSessionFactory();
@@ -49,5 +57,4 @@ public class HibernateConfig {
         }
         return sessionFactory;
     }
-
 }

@@ -13,7 +13,7 @@ import java.util.List;
 
 
 public class PantallaRtaOperador extends Component {
-    private GestorRtaOperador gestor;
+    private final GestorRtaOperador gestor;
     private JButton validarButton;
     private JTextField respuestaOperadorTxt;
     private JButton guardarButton;
@@ -56,7 +56,7 @@ public class PantallaRtaOperador extends Component {
         guardarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                informarAccionRegistrada();
+                tomarRespuestaOperador();
             }
 
         });
@@ -97,7 +97,7 @@ public class PantallaRtaOperador extends Component {
 
     //Metodo encargado de tomar el ingreso del dato de validacion.
     public void tomarIngresoDatoValidacion(){
-        this.gestor.tomarDatoValidacion( (String) validacionCombo.getSelectedItem(), datoAValidarTxt.getText());
+        this.gestor.tomarDatoValidacion( validacionCombo.getSelectedIndex(), datoAValidarTxt.getText());
     }
 
     //Metodo encargado de permitir el ingreso de una respuesta por parte del operador.
@@ -110,59 +110,43 @@ public class PantallaRtaOperador extends Component {
         validacionCombo.setEnabled(false);
         datoAValidarTxt.setEnabled(false);
         validarButton.setEnabled(false);
-
-        //Habilitamos el campo de accion.
-        //comboAccion.setEnabled(true);
-
-        //Tomamos la respuesta ingresada por el operador.
-        tomarRespuestaOperador();
     }
 
     //Metodo encargado de tomar la respuesta del operador.
-    public void tomarRespuestaOperador(){
-        String datosPantalla[] = new String[2];
-
-        datosPantalla[0]= respuestaOperadorTxt.getText();
-        //datosPantalla[1]= (String) comboAccion.getSelectedItem();
-
-        gestor.tomarRtaOperador(datosPantalla);
-
+    public void tomarRespuestaOperador() {
+        this.gestor.tomarRtaOperador(respuestaOperadorTxt.getText());
     }
 
 
     //Metodo encargado de solicitar la confirmacion.
-    public void solicitarConfirmacion(){
+    public void solicitarConfirmacion() {
         //Creamos una variables respuesta, que despliega una ventana con la confirmacion del CU.
         int respuestaConfirmacion = JOptionPane.showConfirmDialog(this, "¿Deseas guardar los cambios?", "Confirmar", JOptionPane.YES_NO_OPTION,JOptionPane.INFORMATION_MESSAGE);
-        tomarConfirmacion(respuestaConfirmacion);
+
+        if (respuestaConfirmacion == JOptionPane.YES_OPTION) {
+            tomarConfirmacion(respuestaConfirmacion);
+        }
     }
 
-    //Metodo encargado de tomar la confirmacion en pantalla.
-    public void tomarConfirmacion(int respuestaConfirmacion){
-        //Condicional encargado de verificar que la resapuesta a la confirmacion sea "si".
-        if (respuestaConfirmacion == JOptionPane.YES_OPTION) {
-            gestor.confirmar();
-        }
+    // Metodo encargado de tomar la confirmación en pantalla.
+    public void tomarConfirmacion (int respuestaConfirmacion) {
+        gestor.confirmar();
     }
 
     // Es un mensaje para informar si la accion se realizo, cuando recibimos el resultado del caso de uso
     public void informarAccionRegistrada(){
-        accionJLabel.setText("Acción Registrada");
+        guardarButton.setEnabled(false);
+        respuestaOperadorTxt.setEnabled(false);
+        JOptionPane.showMessageDialog(null, "Se registró la acción correctamente");
     }
 
-    /*
-    //Metodo encargado de informar la accion registrada.
-    public void InformarAccionRegistrada(){
-        Random num = new Random();
-        boolean validacionAccion = num.nextBoolean();
-        if(validacionAccion == true){
-            JOptionPane.showMessageDialog(this,"AccionRegistrada");
-        }else{
-            JOptionPane.showMessageDialog(this,"No se pudo registrar la accion");
-        }
-
+    // FLUJO ALTERNATIVO: El dato de la validación es incorrecto.
+    public void mostrarDatoValidacionIncorrecto() {
+        JOptionPane.showMessageDialog(null, "El dato a validar es incorrecto.", "Error de Validación", JOptionPane.ERROR_MESSAGE);
     }
 
-     */
-
+    // FLUJO ALTERNATIVO: El CU 28 no se ejecuta con éxito
+    public void mostrarCUNoSeEjecutoConExito() {
+        JOptionPane.showMessageDialog(null, "El CU 28 Registrar acción no se ejecutó con éxito.", "Error de Ejecución", JOptionPane.ERROR_MESSAGE);
+    }
 }

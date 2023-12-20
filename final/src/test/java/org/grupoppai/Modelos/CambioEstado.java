@@ -1,5 +1,7 @@
 package org.grupoppai.Modelos;
 
+import org.grupoppai.Patrones.State.Estado;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -9,26 +11,34 @@ public class CambioEstado {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private LocalDateTime FechayHoraInicio;
+    private LocalDateTime fechaHoraInicio;
+    private LocalDateTime fechaHoraFin;
     @ManyToOne
+    @JoinColumn(name = "estado_id")
     private Estado estado;
 
-    public CambioEstado(LocalDateTime FechayHoraInicio, Estado estado) {
-        this.FechayHoraInicio = FechayHoraInicio;
+    public CambioEstado(LocalDateTime fechaHoraInicio, Estado estado) {
+        this.fechaHoraInicio = fechaHoraInicio;
         this.estado = estado;
     }
 
-    public CambioEstado() {
-
+    public void setFechaHoraFin(LocalDateTime fechaHoraFin) {
+        this.fechaHoraFin = fechaHoraFin;
     }
 
-    public LocalDateTime getFechayHoraInicio() {
-        return FechayHoraInicio;
+    public CambioEstado() {
+    }
+
+    public boolean esActual() {
+        return this.fechaHoraFin == null;
+    }
+
+    public LocalDateTime getFechaHoraInicio() {
+        return fechaHoraInicio;
     }
 
     public Estado getEstado() {
-        return estado;
+        return this.estado;
     }
-    
-    
+
 }

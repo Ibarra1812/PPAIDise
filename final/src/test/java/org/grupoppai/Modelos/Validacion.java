@@ -27,10 +27,5 @@ public class Validacion {
     public boolean esValidacion(String validacion) {
         return Objects.equals(this.nombre, validacion);
     }
-   
-      /*
-    Metodo #20
-    Realiza la obtencion de la validacion
-    */
 
 }
