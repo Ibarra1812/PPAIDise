@@ -18,7 +18,7 @@ public class HibernateConfig {
             try {
                 Configuration configuration = new Configuration();
 
-                // Configuración de la base de datos
+                // Configuración de la base de datos.
                 Properties properties = new Properties();
                 properties.put(Environment.DRIVER, "org.postgresql.Driver");
                 properties.put(Environment.URL, "jdbc:postgresql://localhost:5432/ppai");
@@ -30,7 +30,7 @@ public class HibernateConfig {
                 configuration.setProperties(properties);
 
 
-                // Mapeo de las clases de entidad
+                // Mapeo de las clases de entidad.
                 configuration.addAnnotatedClass(CambioEstado.class);
                 configuration.addAnnotatedClass(CategoriaLlamada.class);
                 configuration.addAnnotatedClass(Cliente.class);
@@ -49,7 +49,7 @@ public class HibernateConfig {
                 configuration.addAnnotatedClass(EscuchaCorrecta.class);
                 configuration.addAnnotatedClass(Cancelada.class);
 
-                // Crear SessionFactory
+                // Crear SessionFactory.
                 sessionFactory = configuration.buildSessionFactory();
             } catch (Exception e) {
                 e.printStackTrace();

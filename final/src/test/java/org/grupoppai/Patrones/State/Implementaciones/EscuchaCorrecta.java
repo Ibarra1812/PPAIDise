@@ -8,10 +8,12 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+// Anotación que indica que es una clase con persistencia.
 @Entity
 @DiscriminatorValue("CORRECTA")
 public class EscuchaCorrecta extends Estado {
 
+    // Atributo de persistencia en la BBDD.
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

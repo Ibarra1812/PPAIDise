@@ -7,16 +7,27 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+// Anotación que indica que es una clase con persistencia.
+
+/*
+    Si bien Estado es una clase abstracta (no debería crear objetos, i.e no debería tener registros
+    en la BBDD), debido a que estamos utilizando la Simulación de la Herencia, la tabla en la base de
+    datos almacena los nombres de los estados concretos.
+ */
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name = "tipo_estado")
+@Inheritance(strategy = InheritanceType.JOINED) // Anotación correspondiente a la Simulación de Herencia.
+@DiscriminatorColumn(name = "tipo_estado") // Columna utilizada para devolver un estado concreto.
 public abstract class Estado {
 
+    // Atributo de persistencia en la BBDD.
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    // Atributo por valor de Estado.
     private String nombre;
 
+    // Constructor sin parámetros.
     public Estado() {
     }
 
@@ -36,8 +47,4 @@ public abstract class Estado {
     public abstract void descartarLlamada() throws Exception;
     public abstract void registrarPendiente() throws Exception;
     public abstract void registrarEscucha() throws Exception;
-
-    public String getNombre() {
-        return this.nombre;
-    }
 }

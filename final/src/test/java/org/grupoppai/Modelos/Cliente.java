@@ -9,44 +9,34 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+// Anotación que indica que es una clase con persistencia.
 @Entity
-public class Cliente implements IAgregado {
+public class Cliente implements IAgregado { // Se implementa la interfaz IAgregado para aplicar el Iterator.
 
+    // Atributo de persistencia en la BBDD.
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    // Atributos por valor de Cliente.
     private String dni;
     private String nombreCompleto;
     private String nroCelular;
+
+    // Atributo por referencia de Cliente.
     @OneToMany
     private List<InformacionCliente> infoCliente;
 
-    public Cliente(String dni, String nombreCompleto, String nroCelular, List<InformacionCliente> infoCliente) {
-        this.dni = dni;
-        this.nombreCompleto = nombreCompleto;
-        this.nroCelular = nroCelular;
-        this.infoCliente = infoCliente;
-    }
-
+    // Constructor sin parámetros.
     public Cliente() {
-
     }
 
-    //Metodo encargado de obtener el nombre completo del cliente.
+    // Método encargado de obtener el nombre completo del cliente.
     public String getNombreCompleto() {
         return nombreCompleto;
     }
 
-    //Metodo encargado de corroborar que sea una validacion valida y que el dato a validar sea correcto.
-    /*
-    public boolean esInformacionCorrecta(String datoValidacion){
-        
-        //Condicionar encargado de corroborar sea una validacion valida y la informacion sea correcta. 
-        return (infoCliente.esValidacion(infoCliente.getValidacion()) && infoCliente.esInformacionCorrecta(datoValidacion));
-
-    }
-     */
-
+    // Método encargado de validar que la información ingresada por el usuario sea correcta.
     public boolean esInformacionCorrecta (Validacion val, String datoValidacion) {
 
         // Se crea la lista de filtros y se agrega el filtro necesario.
@@ -67,7 +57,7 @@ public class Cliente implements IAgregado {
 
             // Si el objeto cumple el filtro (no es nulo), se le pregunta si la información es correcta.
             if (infoCliente != null) {
-                return infoCliente.esInformacionCorrecta(datoValidacion);
+                return infoCliente.esInformacionCorrecta(datoValidacion); // Se verifica que la información sea correcta.
             }
 
             // Incrementamos la posición del índice.
@@ -76,6 +66,7 @@ public class Cliente implements IAgregado {
         return false;
     }
 
+    // Método que implementa la interfaz IAgregado. Siempre se crea un iterador de información de cliente.
     @Override
     public IIterador crearIterador(List elementos, List filtros) {
         return new IteradorInformacionCliente (elementos, filtros);

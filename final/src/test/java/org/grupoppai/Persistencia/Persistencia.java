@@ -25,27 +25,26 @@ public class Persistencia {
      */
     public static void persistirObjetos(Session session, Llamada llamada) {
         Transaction transaction = session.beginTransaction();
-        System.out.println("PUNTO 1");
 
         try {
+            // Se obtienen los cambios de estado para persistirlos.
             List<CambioEstado> cambios = llamada.getCambioEstado();
 
             for (int i = 0; i < cambios.size(); i++) {
 
+                // El primer cambio de estado ya fue creado por el anterior caso de uso. Por lo tanto, sólo se actualiza su fecha y hora de fin.
                 if (i == 0) {
                     session.update(cambios.get(i));
+
                 } else {
-
+                    // Se guardan el nuevo concreto y el cambio de estado correspondiente.
                     session.persist(cambios.get(i).getEstado());
-                    System.out.println("PUNTO 2");
-
                     session.persist(cambios.get(i));
-                    System.out.println("PUNTO 3");
                 }
             }
 
+            // Se actualiza la llamada con sus datos.
             session.update(llamada);
-            System.out.println("PUNTO 4");
 
             transaction.commit();
 

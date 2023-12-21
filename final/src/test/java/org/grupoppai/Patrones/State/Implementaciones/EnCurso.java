@@ -8,10 +8,12 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+// Anotación que indica que es una clase con persistencia.
 @Entity
 @DiscriminatorValue("ENCURSO")
 public class EnCurso extends Estado {
 
+    // Atributo de persistencia en la BBDD.
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -61,7 +63,8 @@ public class EnCurso extends Estado {
 
     // Método para calcular la duración de la llamada
     private int calcularDuracion(List<CambioEstado> cambiosEstado, LocalDateTime fechaHoraActual) {
-        return cambiosEstado.get(0).getFechaHoraInicio().getMinute() - fechaHoraActual.getMinute();
+        // Se resta la fecha y hora actual de la fecha y hora de cuando inició la llamada.
+        return fechaHoraActual.getMinute() - cambiosEstado.get(0).getFechaHoraInicio().getMinute();
     }
 
     // Método para buscar el cambio de estado actual
